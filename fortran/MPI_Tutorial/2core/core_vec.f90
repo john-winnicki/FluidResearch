@@ -1,4 +1,4 @@
-program handoff_test
+program core_vec
 
 !Another lesson learned: Always use different tags when working with different sets of data
 
@@ -201,7 +201,7 @@ CLOSE(1)
 
 call MPI_FINALIZE(ierr)
 
-end program handoff_test
+end program core_vec
 
 
 
