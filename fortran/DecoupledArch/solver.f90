@@ -4,7 +4,7 @@ use mpi
 
 IMPLICIT NONE
 
-INTEGER :: fin_step = 2500
+INTEGER :: fin_step = 500
 INTEGER :: curr_step = 0
 REAL, DIMENSION(2, 2500) :: vectors = 0.
 integer rank, ierr, request
@@ -33,7 +33,7 @@ INTEGER color, solve_track_comm, status(MPI_STATUS_SIZE)
 
 INTEGER :: tag = 22
 
-REAL :: particle_pos_x = 0.
+REAL :: particle_pos_x = 1.
 REAL :: particle_pos_y = 0.
 
 
@@ -111,15 +111,19 @@ IF(color .eq. 0) THEN
 
 
         IF(particle_pos_x > 0 .AND. particle_pos_y > 0) THEN
+            write(*,*) "0"
             particle_pos_x = particle_pos_x + 0.1*x1
             particle_pos_y = particle_pos_y + 0.1*y1
         ELSE IF(particle_pos_x < 0 .AND. particle_pos_y > 0) THEN
+            write(*,*) "1"
             particle_pos_x = particle_pos_x + 0.1*x2
             particle_pos_y = particle_pos_y + 0.1*y2
         ELSE IF(particle_pos_x > 0 .AND. particle_pos_y < 0) THEN
+            write(*,*) "2"
             particle_pos_x = particle_pos_x + 0.1*x3
             particle_pos_y = particle_pos_y + 0.1*y3
         ELSE
+            write(*,*) "3"
             particle_pos_x = particle_pos_x + 0.1*x4
             particle_pos_y = particle_pos_y + 0.1*y4
         END IF
@@ -173,7 +177,6 @@ IF(color .eq. 1) THEN
 
     !         write(*,200) vectors(1,i), vectors(2,i), rank
     !         200 FORMAT (F10.4,",",F10.4,",",I0)
-            curr_step = curr_step + 1
         ELSE IF (intercomm_rank .eq. 1) THEN
             x2 = COS( curr_step * 0.1 + 2.1)
             y2 = SIN( curr_step * 0.1 + 2.1)
@@ -190,6 +193,7 @@ IF(color .eq. 1) THEN
             CALL MPI_SEND(x4, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
             CALL MPI_SEND(y4, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
         END IF
+        curr_step = curr_step + 1
     END DO
 
 END IF
