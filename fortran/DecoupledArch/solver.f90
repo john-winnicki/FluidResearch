@@ -149,10 +149,10 @@ IF(color .eq. 1) THEN
 
 !    write(*,*) "Solver comm: ", solve_track_comm
 
-    CALL MPI_COMM_SIZE(solve_track_comm, sgsize, ierr)
+!    CALL MPI_COMM_SIZE(solve_track_comm, sgsize, ierr)
 !    write(*,*) sgsize
 
-    CALL MPI_COMM_RANK(solve_track_comm, solver_comm_rank, ierr)
+!    CALL MPI_COMM_RANK(solve_track_comm, solver_comm_rank, ierr)
 !    write(*,*) "solver comm rank: ", solver_comm_rank
 
 !    write(*,*) "here1"
