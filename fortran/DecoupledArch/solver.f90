@@ -34,7 +34,7 @@ INTEGER color, solve_track_comm, status(MPI_STATUS_SIZE)
 INTEGER :: tag = 22
 
 REAL :: particle_pos_x = 1.
-REAL :: particle_pos_y = 0.
+REAL :: particle_pos_y = 1.
 
 
 
@@ -118,7 +118,7 @@ IF(color .eq. 0) THEN
             write(*,*) "1"
             particle_pos_x = particle_pos_x + 0.1*x2
             particle_pos_y = particle_pos_y + 0.1*y2
-        ELSE IF(particle_pos_x > 0 .AND. particle_pos_y < 0) THEN
+        ELSE IF(particle_pos_x < 0 .AND. particle_pos_y < 0) THEN
             write(*,*) "2"
             particle_pos_x = particle_pos_x + 0.1*x3
             particle_pos_y = particle_pos_y + 0.1*y3
@@ -170,6 +170,9 @@ IF(color .eq. 1) THEN
             x1 = COS(curr_step * 0.1)
             y1 = SIN(curr_step * 0.1)
 
+            x1 = -1.
+            y1 = 1.
+
 
             CALL MPI_SEND(x1, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
             CALL MPI_SEND(y1, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
@@ -180,16 +183,28 @@ IF(color .eq. 1) THEN
         ELSE IF (intercomm_rank .eq. 1) THEN
             x2 = COS( curr_step * 0.1 + 2.1)
             y2 = SIN( curr_step * 0.1 + 2.1)
+            
+            x2 = -1.
+            y2 = -1.
+
             CALL MPI_SEND(x2, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
             CALL MPI_SEND(y2, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
         ELSE IF (intercomm_rank .eq. 2) THEN
             x3 = COS( curr_step * 0.1 + 1)
             y3 = SIN( curr_step * 0.1 + 1)
+
+            x3 = 1.
+            y3 = -1.
+
             CALL MPI_SEND(x3, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
             CALL MPI_SEND(y3, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
         ELSE
             x4 = COS( curr_step * 0.1)
             y4 = SIN( curr_step * 0.1)
+
+            x4 = 1.
+            y4 = 1.
+
             CALL MPI_SEND(x4, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
             CALL MPI_SEND(y4, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
         END IF
