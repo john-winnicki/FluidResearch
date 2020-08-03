@@ -33,8 +33,8 @@ INTEGER color, solve_track_comm, status(MPI_STATUS_SIZE)
 
 INTEGER :: tag = 22
 
-REAL :: particle_pos_x = 3.
-REAL :: particle_pos_y = 2.
+REAL :: particle_pos_x = 0.
+REAL :: particle_pos_y = 0.
 
 
 
