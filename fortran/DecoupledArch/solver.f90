@@ -12,11 +12,13 @@ integer i
 
 !INTEGER, DIMENSION(1) :: tracker_group_list
 !INTEGER, DIMENSION(1) :: solver_group_list
-INTEGER tracker_group, solver_group, st_intercomm1, st_intercomm2, world_handle
+!INTEGER tracker_group, solver_group, world_handle
 
-INTEGER tracker_comm, solver_comm
+INTEGER st_intercomm1, st_intercomm2
 
-INTEGER tracker_comm_rank, solver_comm_rank, tgsize, sgsize
+!INTEGER tracker_comm, solver_comm
+
+!INTEGER tracker_comm_rank, solver_comm_rank, tgsize, sgsize
 
 REAL :: x1 = 0
 REAL :: y1 = 0
@@ -70,10 +72,10 @@ IF(color .eq. 0) THEN
 
     !write(*,*) "Tracker comm: ", solve_track_comm
 
-    CALL MPI_COMM_SIZE(solve_track_comm, tgsize, ierr)
+!    CALL MPI_COMM_SIZE(solve_track_comm, tgsize, ierr)
     !write(*,*) tgsize
 
-    CALL MPI_COMM_RANK(solve_track_comm, tracker_comm_rank, ierr)
+!    CALL MPI_COMM_RANK(solve_track_comm, tracker_comm_rank, ierr)
     !write(*,*) "tracker comm rank: ", tracker_comm_rank
 
     !write(*,*) "here0"
