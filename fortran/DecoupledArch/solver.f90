@@ -18,8 +18,14 @@ INTEGER tracker_comm, solver_comm
 
 INTEGER tracker_comm_rank, solver_comm_rank, tgsize, sgsize
 
-REAL :: x = 0
-REAL :: y = 0
+REAL :: x1 = 0
+REAL :: y1 = 0
+REAL :: x2 = 0
+REAL :: y2 = 0
+REAL :: x3 = 0
+REAL :: y3 = 0
+REAL :: x4 = 0
+REAL :: y4 = 0
 
 INTEGER intercomm_rank, root_intercomm_rank
 
@@ -91,11 +97,33 @@ IF(color .eq. 0) THEN
 
     DO WHILE (curr_step<fin_step)
 
-        CALL MPI_RECV(x, 1, MPI_REAL, 0, tag, st_intercomm1, status, IERR)
-        CALL MPI_RECV(y, 1, MPI_REAL, 0, tag, st_intercomm1, status, IERR)
+        CALL MPI_RECV(x1, 1, MPI_REAL, 0, tag, st_intercomm1, status, IERR)
+        CALL MPI_RECV(y1, 1, MPI_REAL, 0, tag, st_intercomm1, status, IERR)
 
-        particle_pos_x = particle_pos_x + 0.1*x
-        particle_pos_y = particle_pos_y + 0.1*y
+        CALL MPI_RECV(x2, 1, MPI_REAL, 1, tag, st_intercomm1, status, IERR)
+        CALL MPI_RECV(y2, 1, MPI_REAL, 1, tag, st_intercomm1, status, IERR)
+
+        CALL MPI_RECV(x3, 1, MPI_REAL, 2, tag, st_intercomm1, status, IERR)
+        CALL MPI_RECV(y3, 1, MPI_REAL, 2, tag, st_intercomm1, status, IERR)
+
+        CALL MPI_RECV(x4, 1, MPI_REAL, 3, tag, st_intercomm1, status, IERR)
+        CALL MPI_RECV(y4, 1, MPI_REAL, 3, tag, st_intercomm1, status, IERR)
+
+
+        IF(particle_pos_x > 0 .AND. particle_pos_y > 0) THEN
+            particle_pos_x = particle_pos_x + 0.1*x1
+            particle_pos_y = particle_pos_y + 0.1*y1
+        ELSE IF(particle_pos_x < 0 .AND. particle_pos_y > 0) THEN
+            particle_pos_x = particle_pos_x + 0.1*x2
+            particle_pos_y = particle_pos_y + 0.1*y2
+        ELSE IF(particle_pos_x > 0 .AND. particle_pos_y < 0) THEN
+            particle_pos_x = particle_pos_x + 0.1*x3
+            particle_pos_y = particle_pos_y + 0.1*y3
+        ELSE
+            particle_pos_x = particle_pos_x + 0.1*x4
+            particle_pos_y = particle_pos_y + 0.1*y4
+        END IF
+
 
 !        CALL MPI_BCAST(y, 1, MPI_REAL, root_intercomm_rank, st_intercomm, ierr)
         WRITE(1,100) particle_pos_x, particle_pos_y, rank
@@ -130,24 +158,39 @@ IF(color .eq. 1) THEN
 !    CALL MPI_Bcast(root_intercomm_rank, 1, MPI_INTEGER, 0, MPI_COMM_WORLD, ierr)
 
 
-    IF(intercomm_rank .eq. 0) THEN
     DO WHILE (curr_step<fin_step)
-        vectors(1, curr_step) = COS(curr_step * 0.1)
-        vectors(2, curr_step) = SIN(curr_step * 0.1)
+        IF(intercomm_rank .eq. 0) THEN
+!            vectors(1, curr_step) = COS(curr_step * 0.1)
+!            vectors(2, curr_step) = SIN(curr_step * 0.1)
 
-        x = COS(curr_step * 0.1)
-        y = SIN(curr_step * 0.1)
+            x1 = COS(curr_step * 0.1)
+            y1 = SIN(curr_step * 0.1)
 
 
-        CALL MPI_SEND(x, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
-        CALL MPI_SEND(y, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
-!        CALL MPI_BCAST(y, 1, MPI_REAL, root_intercomm_rank, st_intercomm, ierr)
+            CALL MPI_SEND(x1, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+            CALL MPI_SEND(y1, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+    !        CALL MPI_BCAST(y, 1, MPI_REAL, root_intercomm_rank, st_intercomm, ierr)
 
-!         write(*,200) vectors(1,i), vectors(2,i), rank
-!         200 FORMAT (F10.4,",",F10.4,",",I0)
-        curr_step = curr_step + 1
+    !         write(*,200) vectors(1,i), vectors(2,i), rank
+    !         200 FORMAT (F10.4,",",F10.4,",",I0)
+            curr_step = curr_step + 1
+        ELSE IF (intercomm_rank .eq. 1) THEN
+            x2 = COS( curr_step * 0.1 + 2.1)
+            y2 = SIN( curr_step * 0.1 + 2.1)
+            CALL MPI_SEND(x2, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+            CALL MPI_SEND(y2, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+        ELSE IF (intercomm_rank .eq. 2) THEN
+            x3 = COS( curr_step * 0.1 + 1)
+            y3 = SIN( curr_step * 0.1 + 1)
+            CALL MPI_SEND(x3, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+            CALL MPI_SEND(y3, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+        ELSE
+            x4 = COS( curr_step * 0.1)
+            y4 = SIN( curr_step * 0.1)
+            CALL MPI_SEND(x4, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+            CALL MPI_SEND(y4, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+        END IF
     END DO
-    END IF
 
 END IF
 
