@@ -174,8 +174,8 @@ IF(color .eq. 1) THEN
             y1 = 1.
 
 
-            CALL MPI_SEND(x1, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
-            CALL MPI_SEND(y1, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+            CALL MPI_ISEND(x1, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+            CALL MPI_ISEND(y1, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
     !        CALL MPI_BCAST(y, 1, MPI_REAL, root_intercomm_rank, st_intercomm, ierr)
 
     !         write(*,200) vectors(1,i), vectors(2,i), rank
@@ -187,8 +187,8 @@ IF(color .eq. 1) THEN
             x2 = -1.
             y2 = -1.
 
-            CALL MPI_SEND(x2, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
-            CALL MPI_SEND(y2, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+            CALL MPI_ISEND(x2, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+            CALL MPI_ISEND(y2, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
         ELSE IF (intercomm_rank .eq. 2) THEN
             x3 = COS( curr_step * 0.1 + 1)
             y3 = SIN( curr_step * 0.1 + 1)
@@ -196,8 +196,8 @@ IF(color .eq. 1) THEN
             x3 = 1.
             y3 = -1.
 
-            CALL MPI_SEND(x3, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
-            CALL MPI_SEND(y3, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+            CALL MPI_ISEND(x3, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+            CALL MPI_ISEND(y3, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
         ELSE
             x4 = COS( curr_step * 0.1)
             y4 = SIN( curr_step * 0.1)
@@ -205,8 +205,8 @@ IF(color .eq. 1) THEN
             x4 = 1.
             y4 = 1.
 
-            CALL MPI_SEND(x4, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
-            CALL MPI_SEND(y4, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+            CALL MPI_ISEND(x4, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
+            CALL MPI_ISEND(y4, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
         END IF
         curr_step = curr_step + 1
     END DO
