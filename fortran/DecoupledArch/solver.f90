@@ -27,6 +27,9 @@ INTEGER color, solve_track_comm, status(MPI_STATUS_SIZE)
 
 INTEGER :: tag = 22
 
+REAL :: particle_pos_x = 3
+REAL :: particle_pos_y = 2
+
 
 
 !LESSON LEARNED: TAGS ARE REALLY IMPORTANT. THEY MUST BE THE SAME THROUGHOUT THE COMMUNICATION CHANNELS.
@@ -57,7 +60,7 @@ CALL MPI_Comm_split(MPI_COMM_WORLD, color, rank, solve_track_comm, ierr);
 
 write(*,*) "here"
 
-IF(rank .eq. 0) THEN
+IF(color .eq. 0) THEN
 
     !write(*,*) "Tracker comm: ", solve_track_comm
 
@@ -94,8 +97,11 @@ IF(rank .eq. 0) THEN
         if(ierr/=MPI_SUCCESS)print*,'Error in rec '
             print*,'rec buff = ', x, y 
 
+        particle_pos_x = particle_ pos_x + 0.1*x
+        particle_pos_y = particle_ pos_y + 0.1*y
+
 !        CALL MPI_BCAST(y, 1, MPI_REAL, root_intercomm_rank, st_intercomm, ierr)
-        WRITE(1,100) x, y, rank
+        WRITE(1,100) particle_pos_x, particle_pos_y, rank
             100 FORMAT (F10.4,",",F10.4,",",I0)
         curr_step = curr_step + 1
     END DO
@@ -108,7 +114,7 @@ END IF
 
 
 
-IF(rank .eq. 1) THEN
+IF(color .eq. 1) THEN
 
 !    write(*,*) "Solver comm: ", solve_track_comm
 
@@ -140,8 +146,8 @@ IF(rank .eq. 1) THEN
         CALL MPI_SEND(y, 1, MPI_REAL, 0, tag, st_intercomm2, IERR)
 !        CALL MPI_BCAST(y, 1, MPI_REAL, root_intercomm_rank, st_intercomm, ierr)
 
-         write(*,200) vectors(1,i), vectors(2,i), rank
-         200 FORMAT (F10.4,",",F10.4,",",I0)
+!         write(*,200) vectors(1,i), vectors(2,i), rank
+!         200 FORMAT (F10.4,",",F10.4,",",I0)
         curr_step = curr_step + 1
     END DO
     END IF
