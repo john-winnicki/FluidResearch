@@ -27,8 +27,8 @@ INTEGER color, solve_track_comm, status(MPI_STATUS_SIZE)
 
 INTEGER :: tag = 22
 
-REAL :: particle_pos_x = 3
-REAL :: particle_pos_y = 2
+REAL :: particle_pos_x = 3.
+REAL :: particle_pos_y = 2.
 
 
 
@@ -94,11 +94,8 @@ IF(color .eq. 0) THEN
         CALL MPI_RECV(x, 1, MPI_REAL, 0, tag, st_intercomm1, status, IERR)
         CALL MPI_RECV(y, 1, MPI_REAL, 0, tag, st_intercomm1, status, IERR)
 
-        if(ierr/=MPI_SUCCESS)print*,'Error in rec '
-            print*,'rec buff = ', x, y 
-
-        particle_pos_x = particle_ pos_x + 0.1*x
-        particle_pos_y = particle_ pos_y + 0.1*y
+        particle_pos_x = particle_pos_x + 0.1*x
+        particle_pos_y = particle_pos_y + 0.1*y
 
 !        CALL MPI_BCAST(y, 1, MPI_REAL, root_intercomm_rank, st_intercomm, ierr)
         WRITE(1,100) particle_pos_x, particle_pos_y, rank
