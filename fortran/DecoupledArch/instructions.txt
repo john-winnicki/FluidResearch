@@ -1,0 +1,4 @@
+Compile like so: 
+mpifort -o solver solver.f90
+mpifort -o tracker tracker.f90
+mpiexec -n 6 ./programscript

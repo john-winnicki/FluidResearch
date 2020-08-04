@@ -1,0 +1,8 @@
+#!/bin/bash
+if [ ${PMI_RANK} -eq 0 ] ; then
+  ./tracker
+elif [ ${PMI_RANK} -eq 1 ] ; then
+  ./tracker
+else
+  ./solver
+fi

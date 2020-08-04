@@ -49,6 +49,8 @@ INTEGER :: solver_num = 4
 CALL MPI_INIT(ierr)
 CALL MPI_Comm_rank(MPI_COMM_WORLD, rank, ierr)
 
+write(*,*) "SOLVER RANK: ", rank
+
 color = 1
 
 CALL MPI_Comm_split(MPI_COMM_WORLD, color, rank, solve_track_comm, ierr);

@@ -47,7 +47,7 @@ INTEGER tracker_leader_wrank
 
 CALL MPI_INIT(ierr)
 CALL MPI_Comm_rank(MPI_COMM_WORLD, rank, ierr)
-
+write(*,*) "TRACKER RANK: ", rank
 color = 0
 
 write(*,*) "color: ", color
@@ -71,7 +71,7 @@ write(*,*) filename
 
 
 CALL MPI_INTERCOMM_CREATE(solve_track_comm, 0, MPI_COMM_WORLD, 2, tag, st_intercomm1, ierr)
-
+write(*,*) "INTERCOM CREATED"
  !Tracker group is the group we want to link, 0 is the rank of the leader (arbitrarily chosen), MPI_COMM_WORLD is the communicator in which the two "leader"
  ! Processes share (that is, the tracker and solver processes).
 !     IN MPI_COMM_WORLD, the rank is 0, and the rank of the tracker is 1. So in the above, we use 1 as the leader rank of the peer communicator.
@@ -115,7 +115,7 @@ DO WHILE (curr_step<fin_step)
 
 
 !        CALL MPI_BCAST(y, 1, MPI_REAL, root_intercomm_rank, st_intercomm, ierr)
-    WRITE(1,100) particle_pos_x, particle_pos_y, rank
+    WRITE(filetag,100) particle_pos_x, particle_pos_y, rank
         100 FORMAT (F10.4,",",F10.4,",",I0)
     curr_step = curr_step + 1
 END DO
